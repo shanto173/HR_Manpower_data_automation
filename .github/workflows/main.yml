@@ -39,12 +39,6 @@ jobs:
           echo "${{ secrets.GOOGLE_CREDENTIALS_BASE64 }}" | base64 -d > gcreds.json
 
 # downLoad_OT_DATA.py
-        
-      - name: Run download_PO_Data
-        env:
-          GOOGLE_CREDENTIALS_BASE64: gcreds.json
-        run: python download_PO_Data.py
-
 
       - name: Run download_OT_Data
         env:
@@ -55,6 +49,15 @@ jobs:
         env:
           GOOGLE_CREDENTIALS_BASE64: gcreds.json
         run: python MT_download_OT_Data.py
+        
+        
+      - name: Run download_PO_Data
+        env:
+          GOOGLE_CREDENTIALS_BASE64: gcreds.json
+        run: python download_PO_Data.py
+
+
+
 
       - name: Clean up creds
         run: rm gcreds.json
