@@ -208,7 +208,7 @@ try:
 
     files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
     latest_file = files[0]
-    df = pd.read_excel(latest_file,sheet_name=1)
+    df = pd.read_excel(latest_file,sheet_name=0)
     time.sleep(8)
     log.info("✅ File loaded into DataFrame.")
 
