@@ -230,7 +230,7 @@ try:
     else:
         worksheet.clear()
         time.sleep(4)
-        set_with_dataframe(worksheet, df)
+        set_with_dataframe(worksheet, df, row=1, col=2)
         print("Data pasted to Google Sheet (Sheet4).")
         local_tz = pytz.timezone('Asia/Dhaka')
         local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
