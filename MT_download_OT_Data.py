@@ -228,7 +228,7 @@ try:
     if df.empty:
         print("Skip: DataFrame is empty, not pasting to sheet.")
     else:
-        worksheet.clear()
+        worksheet.batch_clear(["B1:BZ1000"])
         time.sleep(4)
         set_with_dataframe(worksheet, df, row=1, col=2)
         print("Data pasted to Google Sheet (Sheet4).")
