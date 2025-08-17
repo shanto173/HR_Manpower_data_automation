@@ -209,6 +209,8 @@ try:
     files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
     latest_file = files[0]
     df = pd.read_excel(latest_file,sheet_name=0)
+    time.sleep(3)
+    df_cost = pd.read_excel(latest_file,sheet_name=1)
     time.sleep(8)
     log.info("✅ File loaded into DataFrame.")
 
@@ -228,15 +230,29 @@ try:
     if df.empty:
         print("Skip: DataFrame is empty, not pasting to sheet.")
     else:
-        worksheet.batch_clear(["B1:BZ1000"])
+        worksheet.batch_clear(["C1:BZ1000"])
         time.sleep(4)
-        set_with_dataframe(worksheet, df, row=1, col=2)
+        set_with_dataframe(worksheet, df, row=1, col=3)
         print("Data pasted to Google Sheet (Sheet4).")
         local_tz = pytz.timezone('Asia/Dhaka')
         local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
         worksheet.update("E1", [[f"{local_time}"]])
         log.info(f"✅ Data pasted & timestamp updated: {local_time}")
 
+    sheet_new = client.open_by_key("1-kBuln5CnKucuHqYG4vvgttJ8DqeJALvr4TjAYuVkXs")
+    worksheet_new = sheet_new.worksheet("ZIP_OT_DATA")
+    
+    if df_cost.empty:
+        print("Skip: DataFrame is empty, not pasting to sheet.")
+    else:
+        worksheet_new.batch_clear(["B1:BZ1000"])
+        time.sleep(4)
+        set_with_dataframe(worksheet_new, df_cost, row=1, col=2)
+        print("Data pasted to Google Sheet (Sheet4).")
+        local_tz = pytz.timezone('Asia/Dhaka')
+        local_time = datetime.now(local_tz).strftime("%Y-%m-%d %H:%M:%S")
+        worksheet_new.update("E1", [[f"{local_time}"]])
+        log.info(f"✅ Data pasted & timestamp updated: {local_time}")
     
 
 except Exception as e:
