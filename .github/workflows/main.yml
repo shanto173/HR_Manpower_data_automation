@@ -3,8 +3,8 @@ name: HR_OT_DATA_RUN
 on:
   workflow_dispatch:  # Manual run
   schedule:
-  # - cron: '0 2 * * *'     # 8:00 AM BD
-  # - cron: '0 3 * * *'     # 9:00 AM BD
+  - cron: '0 2 * * *'     # 8:00 AM BD
+  - cron: '0 3 * * *'     # 9:00 AM BD
   - cron: '0 4 * * *'     # 10:00 AM BD
   - cron: '0 5 * * *'     # 11:00 AM BD
   - cron: '0 6 * * *'     # 12:00 PM BD
@@ -51,10 +51,10 @@ jobs:
         run: python MT_download_OT_Data.py
         
         
-      - name: Run download_PO_Data
-        env:
-          GOOGLE_CREDENTIALS_BASE64: gcreds.json
-        run: python download_PO_Data.py
+      # - name: Run download_PO_Data
+      #   env:
+      #     GOOGLE_CREDENTIALS_BASE64: gcreds.json
+      #   run: python download_PO_Data.py
 
 
 
