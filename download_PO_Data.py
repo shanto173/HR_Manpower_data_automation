@@ -32,11 +32,11 @@ download_dir = os.path.join(os.getcwd(), "download")
 os.makedirs(download_dir, exist_ok=True)
 
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument("--headless")  # Comment this line for debug
-# chrome_options.add_argument("--disable-gpu")
-# chrome_options.add_argument("--window-size=1920,1080")
-# chrome_options.add_argument("--no-sandbox")
-# chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--headless")  # Comment this line for debug
+chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument("--window-size=1920,1080")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_experimental_option("prefs", {
     "download.default_directory": download_dir,
     "download.prompt_for_download": False,
@@ -63,26 +63,39 @@ while True:  # Infinite loop until the file is downloaded
         driver.find_element(By.XPATH, "//button[contains(text(), 'Log in')]").click()
         time.sleep(2)
 
-        time.sleep(2)
-        try:
-            wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal-backdrop")))
-        except:
-            pass
-
-        switcher_span = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,
-            "div.o_menu_systray div.o_switch_company_menu > button > span"
+            
+        #########
+        
+        
+        # === Step 2: Click user/company switch ===
+        switcher_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,
+            "div.o_menu_systray div.o_switch_company_menu > button"
         )))
-        driver.execute_script("arguments[0].scrollIntoView(true);", switcher_span)
-        switcher_span.click()
+        switcher_button.click()
         time.sleep(2)
 
-        log.info("Selecting 'Zipper' company...")
-        target_div = wait.until(EC.element_to_be_clickable((By.XPATH,
-            "//div[contains(@class, 'log_into')][span[contains(text(), 'Zipper')]]"
-        )))
-        driver.execute_script("arguments[0].scrollIntoView(true);", target_div)
-        target_div.click()
+        # Step 2: Wait for the switcher menu to load
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.o_switch_company_menu")))
+
+        # Step 3: Find the div for Zipper using aria-label
+        zipper_checkbox_xpath = "//div[@role='menuitemcheckbox' and @aria-label='Zipper']"
+        zipper_div = wait.until(EC.presence_of_element_located((By.XPATH, zipper_checkbox_xpath)))
+
+        # Step 4: Check if it's already selected (aria-checked == "true")
+        checked = zipper_div.get_attribute("aria-checked")
+        print(f"[DEBUG] aria-checked for Zipper: {checked}")
+
+        if checked == "false":
+            zipper_div.click()
+            print("✅ Zipper selected.")
+        else:
+            print("✅ Zipper already selected.")
+
+        # Step 5: Optionally click outside to close the menu
         time.sleep(4)
+        
+        
+        ############
 
         # Going to purchase module
         driver.get("https://taps.odoo.com/web#action=529&model=purchase.order&view_type=list&menu_id=342&cids=1")
