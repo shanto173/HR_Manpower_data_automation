@@ -131,22 +131,27 @@ while True:  # Infinite loop until the file is downloaded
         # === 1. Get today's date
         today = datetime.today()
 
-        # === 2. Calculate start and end of "office month" (26th → 25th)
-        if today.day >= 26:
-            # We're after the 26th: start = 26th current month, end = 25th next month
-            start_date = datetime(today.year, today.month, 26)
-            # handle December -> January
-            if today.month == 12:
-                end_date = datetime(today.year + 1, 1, 25)
-            else:
-                end_date = datetime(today.year, today.month + 1, 25)
-        else:
-            # We're before 26th: start = 26th previous month, end = 25th current month
+        if today.day < 26:
+            # Normal previous office month
             if today.month == 1:
                 start_date = datetime(today.year - 1, 12, 26)
             else:
                 start_date = datetime(today.year, today.month - 1, 26)
             end_date = datetime(today.year, today.month, 25)
+        elif today.day == 26:
+            # Still previous office month
+            if today.month == 1:
+                start_date = datetime(today.year - 1, 12, 26)
+            else:
+                start_date = datetime(today.year, today.month - 1, 26)
+            end_date = datetime(today.year, today.month, 25)
+        else:
+            # Current office month
+            start_date = datetime(today.year, today.month, 26)
+            if today.month == 12:
+                end_date = datetime(today.year + 1, 1, 25)
+            else:
+                end_date = datetime(today.year, today.month + 1, 25)
 
         # Format for Selenium input
         start_str = start_date.strftime("%d/%m/%Y")
