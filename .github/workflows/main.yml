@@ -59,10 +59,10 @@ jobs:
         run: python MT_download_OT_Data.py
         
         
-      # - name: Run download_PO_Data
-      #   env:
-      #     GOOGLE_CREDENTIALS_BASE64: gcreds.json
-      #   run: python download_PO_Data.py
+      - name: Run download_PO_Data
+        env:
+          GOOGLE_CREDENTIALS_BASE64: gcreds.json
+        run: python download_PO_Data.py
 
 
 
