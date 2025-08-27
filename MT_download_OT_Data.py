@@ -129,29 +129,10 @@ while True:  # Infinite loop until the file is downloaded
         
         # Input date value 
         # === 1. Get today's date
-        today = datetime.today()
+        start_date = datetime(2025, 7, 26)
 
-        if today.day < 26:
-            # Normal previous office month
-            if today.month == 1:
-                start_date = datetime(today.year - 1, 12, 26)
-            else:
-                start_date = datetime(today.year, today.month - 1, 26)
-            end_date = datetime(today.year, today.month, 25)
-        elif today.day == 26:
-            # Still previous office month
-            if today.month == 1:
-                start_date = datetime(today.year - 1, 12, 26)
-            else:
-                start_date = datetime(today.year, today.month - 1, 26)
-            end_date = datetime(today.year, today.month, 25)
-        else:
-            # Current office month
-            start_date = datetime(today.year, today.month, 26)
-            if today.month == 12:
-                end_date = datetime(today.year + 1, 1, 25)
-            else:
-                end_date = datetime(today.year, today.month + 1, 25)
+        # Dynamic end date (today)
+        end_date = datetime.today()
 
         # Format for Selenium input
         start_str = start_date.strftime("%d/%m/%Y")
@@ -251,7 +232,7 @@ try:
     if df_cost.empty:
         print("Skip: DataFrame is empty, not pasting to sheet.")
     else:
-        worksheet_new.batch_clear(["B1:BZ1000"])
+        worksheet_new.batch_clear(["B1:HI1000"])
         time.sleep(4)
         set_with_dataframe(worksheet_new, df_cost, row=1, col=2)
         print("Data pasted to Google Sheet (Sheet4).")
